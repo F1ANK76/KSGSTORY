@@ -9,21 +9,20 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnNameChanged))]
     public string playerName;
 
-    public TextMeshProUGUI _nameTMP; // 머리 위 TMP
+    public TextMeshProUGUI _nameTMP;
 
-    private void Start()
+    public override void OnStartLocalPlayer()
     {
-        // 로컬 플레이어라면 PlayerPrefs에서 닉네임 가져오기
-        if (isLocalPlayer)
-        {
-            playerName = PlayerPrefs.GetString("PlayerNickname", "Player");
-        }
+        string name = PlayerPrefs.GetString("PlayerNickname", "Player");
+        CmdSetName(name);
     }
 
-    void Update()
+    private void Update()
     {
         if (!isLocalPlayer)
+        {
             return;
+        }
 
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
@@ -31,10 +30,17 @@ public class Player : NetworkBehaviour
         transform.Translate(new Vector3(h, v, 0) * speed * Time.deltaTime);
     }
 
-    // SyncVar hook으로 다른 클라이언트에도 적용
-    void OnNameChanged(string oldName, string newName)
+    [Command]
+    private void CmdSetName(string name)
+    {
+        playerName = name;
+    }
+
+    private void OnNameChanged(string oldName, string newName)
     {
         if (_nameTMP != null)
+        {
             _nameTMP.text = newName;
+        }
     }
 }
