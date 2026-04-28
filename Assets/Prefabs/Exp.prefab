@@ -122,6 +122,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _gradePrefabs: []
 --- !u!61 &-7661230675631169579
 BoxCollider2D:
   m_ObjectHideFlags: 0
