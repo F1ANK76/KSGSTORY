@@ -3,8 +3,8 @@ using Mirror;
 
 public class ExpObject : NetworkBehaviour
 {
-    [Header("Grade Prefabs (Normal ~ Mythic 순서)")]
-    [SerializeField] private GameObject[] _gradePrefabs;
+    [Header("Card Prefab (1개만 사용)")]
+    [SerializeField] private GameObject _cardPrefab;
 
     [Server]
     public void Collect()
@@ -22,13 +22,13 @@ public class ExpObject : NetworkBehaviour
     {
         float rand = Random.value;
 
-        if (rand < 0.001f) return Grade.Mythic;      // 0.1%
-        else if (rand < 0.005f) return Grade.Legendary; // 0.4%
-        else if (rand < 0.03f) return Grade.Unique;     // 2.5%
-        else if (rand < 0.08f) return Grade.Epic;       // 5%
-        else if (rand < 0.20f) return Grade.Rare;       // 12%
-        else if (rand < 0.50f) return Grade.Normal;     // 30%
-        else return Grade.None;                         // 50%
+        if (rand < 0.001f) return Grade.Mythic;
+        else if (rand < 0.005f) return Grade.Legendary;
+        else if (rand < 0.03f) return Grade.Unique;
+        else if (rand < 0.08f) return Grade.Epic;
+        else if (rand < 0.20f) return Grade.Rare;
+        else if (rand < 0.50f) return Grade.Normal;
+        else return Grade.None;
     }
 
     [Server]
@@ -39,16 +39,15 @@ public class ExpObject : NetworkBehaviour
             return;
         }
 
-        int index = (int)grade - 1;
+        GameObject obj = Instantiate(_cardPrefab, transform.position, Quaternion.identity);
 
-        if (index < 0 || index >= _gradePrefabs.Length)
+        Card card = obj.GetComponent<Card>();
+
+        if (card != null)
         {
-            return;
+            card.Init(grade);
         }
 
-        GameObject prefab = _gradePrefabs[index];
-
-        GameObject obj = Instantiate(prefab, transform.position, Quaternion.identity);
         NetworkServer.Spawn(obj);
     }
 }

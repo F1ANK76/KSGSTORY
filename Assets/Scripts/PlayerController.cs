@@ -3,27 +3,50 @@ using Mirror;
 
 public class PlayerController : NetworkBehaviour
 {
-    //private void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    if (!isLocalPlayer)
-    //    {
-    //        return;
-    //    }
+    private UIManager _uiManager;
 
-    //    if (other.CompareTag("Exp"))
-    //    {
-    //        CmdCollectExp(other.gameObject);
-    //    }
-    //}
+    public override void OnStartLocalPlayer()
+    {
+        _uiManager = FindFirstObjectByType<UIManager>();
+        _uiManager.ShowUI();  // Ä«µå ½½·Ô¸¸ ÄÔ
+    }
 
-    //[Command]
-    //private void CmdCollectExp(GameObject expObj)
-    //{
-    //    ExpObject exp = expObj.GetComponent<ExpObject>();
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
 
-    //    if (exp != null)
-    //    {
-    //        exp.Collect();
-    //    }
-    //}
+        if (other.TryGetComponent(out Card card))
+        {
+            CmdCollectCard(other.gameObject);
+        }
+    }
+
+    [Command]
+    private void CmdCollectCard(GameObject cardObj)
+    {
+        Card card = cardObj.GetComponent<Card>();
+
+        if (card != null)
+        {
+            Grade grade = card.GetGrade();
+
+            RpcOnCardCollected(grade);
+
+            NetworkServer.Destroy(cardObj);
+        }
+    }
+
+    [ClientRpc]
+    private void RpcOnCardCollected(Grade grade)
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        _uiManager.OnCardCollected(grade);
+    }
 }
