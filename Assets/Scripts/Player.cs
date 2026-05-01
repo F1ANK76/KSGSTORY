@@ -15,6 +15,9 @@ public class Player : NetworkBehaviour
     {
         string name = PlayerPrefs.GetString("PlayerNickname", "Player");
         CmdSetName(name);
+
+        CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+        cam.SetTarget(transform);
     }
 
     private void Update()

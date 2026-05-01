@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
@@ -5,34 +6,51 @@ public class ExpSpawner : NetworkBehaviour
 {
     [SerializeField] private GameObject _expPrefab;
 
+    private int _maxCount = 8;
+    private List<GameObject> _current = new List<GameObject>();
+
+    private Vector2 _center = Vector2.zero;
+    private float _range = 5f;
+
     public override void OnStartServer()
     {
-        base.OnStartServer();
-
-        SpawnExpObjects();
+        for (int i = 0; i < _maxCount; i++)
+        {
+            Spawn();
+        }
     }
 
     [Server]
-    private void SpawnExpObjects()
+    public void Spawn()
     {
-        Vector3[] directions =
+        if (_current.Count >= _maxCount)
         {
-            Vector3.up,
-            Vector3.down,
-            Vector3.left,
-            Vector3.right,
-            new Vector3(1, 1, 0),
-            new Vector3(-1, 1, 0),
-            new Vector3(1, -1, 0),
-            new Vector3(-1, -1, 0)
-        };
-
-        foreach (var dir in directions)
-        {
-            Vector3 spawnPos = transform.position + dir * 2f;
-
-            GameObject expObj = Instantiate(_expPrefab, spawnPos, Quaternion.identity);
-            NetworkServer.Spawn(expObj);
+            return;
         }
+
+        Vector2 pos = GetRandomPos();
+
+        GameObject obj = Instantiate(_expPrefab, pos, Quaternion.identity);
+        NetworkServer.Spawn(obj);
+
+        _current.Add(obj);
+
+        ExpObject exp = obj.GetComponent<ExpObject>();
+        exp.SetSpawner(this);
+    }
+
+    [Server]
+    public void OnExpDestroyed(GameObject obj)
+    {
+        _current.Remove(obj);
+        Spawn();
+    }
+
+    private Vector2 GetRandomPos()
+    {
+        return _center + new Vector2(
+            Random.Range(-_range, _range),
+            Random.Range(-_range, _range)
+        );
     }
 }

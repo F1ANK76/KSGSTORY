@@ -6,14 +6,23 @@ public class ExpObject : NetworkBehaviour
     [Header("Card Prefab (1°³¸¸ »ç¿ë)")]
     [SerializeField] private GameObject _cardPrefab;
 
+    private ExpSpawner _spawner;
+
+    public void SetSpawner(ExpSpawner spawner)
+    {
+        _spawner = spawner;
+    }
+
     [Server]
     public void Collect()
     {
         Grade grade = GetRandomGrade();
-
-        Debug.Log($"È¹µæ µî±Þ: {grade}");
-
         SpawnGradeObject(grade);
+
+        if (_spawner != null)
+        {
+            _spawner.OnExpDestroyed(gameObject);
+        }
 
         NetworkServer.Destroy(gameObject);
     }
