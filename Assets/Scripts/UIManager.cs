@@ -5,8 +5,16 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _cardSlots;
     [SerializeField] private Image[] _slots;
+    [SerializeField] private Image[] _skillImgs;
 
     private bool[] _collected = new bool[6];
+    private bool[] _skillUnlocked = new bool[3];
+    private Color _activeColor = Color.green;
+
+    public bool IsSkillUnlocked(int index)
+    {
+        return _skillUnlocked[index];
+    }
 
     public void ShowUI()
     {
@@ -63,15 +71,26 @@ public class UIManager : MonoBehaviour
 
         if (count == 2)
         {
-            Debug.Log("2종 활성 효과 발동!");
+            UnlockSkill(0);
         }
         else if (count == 4)
         {
-            Debug.Log("4종 활성 효과 발동!");
+            UnlockSkill(1);
         }
         else if (count == 6)
         {
-            Debug.Log("풀 활성!");
+            UnlockSkill(2);
         }
+    }
+
+    private void UnlockSkill(int index)
+    {
+        if (_skillUnlocked[index])
+        {
+            return;
+        }
+
+        _skillUnlocked[index] = true;
+        _skillImgs[index].color = _activeColor;
     }
 }

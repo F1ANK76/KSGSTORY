@@ -292,6 +292,8 @@ MonoBehaviour:
   speed: 5
   playerName: 
   _nameTMP: {fileID: 9115833098221093702}
+  _slashPrefab: {fileID: 1366947957754335922, guid: d03023638a095264d8ed4092eeb6f474, type: 3}
+  _attackPoint: {fileID: 4912531567022634724}
 --- !u!114 &7179783271633139449
 MonoBehaviour:
   m_ObjectHideFlags: 0
