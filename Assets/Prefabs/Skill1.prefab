@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2086129812923651826}
   - component: {fileID: 5079406119696222091}
   - component: {fileID: -7698540037153031372}
-  - component: {fileID: -8185286683567328275}
   - component: {fileID: -890583758138098438}
+  - component: {fileID: -5791734327094112803}
   m_Layer: 0
   m_Name: Skill1
   m_TagString: Untagged
@@ -136,7 +136,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.8828125, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-8185286683567328275
+--- !u!114 &-890583758138098438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366947957754335922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee315a0833f0174eaefadcb20d1e737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5791734327094112803
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,15 +165,3 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!114 &-890583758138098438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366947957754335922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fee315a0833f0174eaefadcb20d1e737, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

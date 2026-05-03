@@ -4,6 +4,8 @@ using System.Collections;
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private WeaponHit _weaponHit;
+    [SerializeField] private float _attackAngle = 90f;
+
     private bool _isAttacking;
 
     public Transform weaponPivot;
@@ -16,46 +18,55 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    public void SetAttackAngle(float angle)
+    {
+        _attackAngle = angle;
+    }
+
     IEnumerator Swing()
     {
         _isAttacking = true;
-        _weaponHit.canHit = true; // 공격 시작
+        _weaponHit.canHit = true;
 
         float duration = 0.5f;
-        float time = 0f;
+        float half = duration * 0.5f;
 
-        float startAngle = 0f;
-        float endAngle = -90f;
+        float rotated = 0f;
+        float target = _attackAngle;
 
-        // 앞으로
-        while (time < duration * 0.5f)
+        while (rotated < target)
         {
-            time += Time.deltaTime;
-            float t = time / (duration * 0.5f);
+            float delta = target / half * Time.deltaTime;
 
-            float angle = Mathf.Lerp(startAngle, endAngle, t);
-            weaponPivot.localRotation = Quaternion.Euler(0, 0, angle);
+            if (rotated + delta > target)
+            {
+                delta = target - rotated;
+            }
+
+            weaponPivot.Rotate(0f, 0f, -delta);
+            rotated += delta;
 
             yield return null;
         }
 
-        time = 0f;
+        rotated = 0f;
 
-        // 돌아오기
-        while (time < duration * 0.5f)
+        while (rotated < target)
         {
-            time += Time.deltaTime;
-            float t = time / (duration * 0.5f);
+            float delta = target / half * Time.deltaTime;
 
-            float angle = Mathf.Lerp(endAngle, startAngle, t);
-            weaponPivot.localRotation = Quaternion.Euler(0, 0, angle);
+            if (rotated + delta > target)
+            {
+                delta = target - rotated;
+            }
+
+            weaponPivot.Rotate(0f, 0f, delta);
+            rotated += delta;
 
             yield return null;
         }
-
-        weaponPivot.localRotation = Quaternion.Euler(0, 0, startAngle);
 
         _isAttacking = false;
-        _weaponHit.canHit = false; // 공격 끝
+        _weaponHit.canHit = false;
     }
 }

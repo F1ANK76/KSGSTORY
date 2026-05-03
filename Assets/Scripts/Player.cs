@@ -9,10 +9,15 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnNameChanged))]
     public string playerName;
 
+    [SyncVar(hook = nameof(OnSwordScaleYChanged))]
+    private float _swordScaleY = 5f;
+
+    [SyncVar(hook = nameof(OnSwordScaleXChanged))]
+    private float _swordScaleX = 0.35f;
+
     public TextMeshProUGUI _nameTMP;
 
-    [SerializeField] private GameObject _slashPrefab;
-    [SerializeField] private Transform _attackPoint;
+    [SerializeField] private Transform _sword;
 
     private UIManager _uiManager;
 
@@ -25,6 +30,11 @@ public class Player : NetworkBehaviour
         cam.SetTarget(transform);
 
         _uiManager = FindFirstObjectByType<UIManager>();
+
+        if (_uiManager != null)
+        {
+            _uiManager.SetPlayer(this);
+        }
     }
 
     private void Update()
@@ -38,29 +48,32 @@ public class Player : NetworkBehaviour
         float v = Input.GetAxis("Vertical");
 
         transform.Translate(new Vector3(h, v, 0) * speed * Time.deltaTime);
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (_uiManager != null && _uiManager.IsSkillUnlocked(0))
-            {
-                CmdSlash();
-            }
-        }
     }
 
     [Command]
-    private void CmdSlash()
+    public void CmdSetSwordScaleX(float value)
     {
-        bool isRight = transform.localScale.x > 0;
+        _swordScaleX = value;
+    }
 
-        GameObject slash = Instantiate(_slashPrefab, _attackPoint.position, Quaternion.identity);
+    private void OnSwordScaleXChanged(float oldValue, float newValue)
+    {
+        Vector3 scale = _sword.localScale;
+        scale.x = newValue;
+        _sword.localScale = scale;
+    }
 
-        Slash s = slash.GetComponent<Slash>();
-        s.Init(isRight);
+    [Command]
+    public void CmdSetSwordScaleY(float value)
+    {
+        _swordScaleY = value;
+    }
 
-        NetworkServer.Spawn(slash);
-
-        Destroy(slash, 0.3f);
+    private void OnSwordScaleYChanged(float oldValue, float newValue)
+    {
+        Vector3 scale = _sword.localScale;
+        scale.y = newValue;
+        _sword.localScale = scale;
     }
 
     [Command]

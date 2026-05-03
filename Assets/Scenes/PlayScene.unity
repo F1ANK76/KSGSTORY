@@ -752,6 +752,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 6514305117484438437, guid: 236560a4b3845bd428e68857c681c2e2, type: 3}
   - {fileID: 7019369912843122944, guid: 6e0e10cead05c72409faecfd06443834, type: 3}
+  - {fileID: 1366947957754335922, guid: d03023638a095264d8ed4092eeb6f474, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -976,7 +977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &509141461
 RectTransform:
   m_ObjectHideFlags: 0

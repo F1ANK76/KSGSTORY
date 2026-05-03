@@ -11,6 +11,13 @@ public class UIManager : MonoBehaviour
     private bool[] _skillUnlocked = new bool[3];
     private Color _activeColor = Color.green;
 
+    private Player _player;
+
+    public void SetPlayer(Player player)
+    {
+        _player = player;
+    }
+
     public bool IsSkillUnlocked(int index)
     {
         return _skillUnlocked[index];
@@ -32,7 +39,6 @@ public class UIManager : MonoBehaviour
 
         if (_collected[index])
         {
-            Debug.Log("이미 먹은 카드");
             return;
         }
 
@@ -92,5 +98,26 @@ public class UIManager : MonoBehaviour
 
         _skillUnlocked[index] = true;
         _skillImgs[index].color = _activeColor;
+
+        if (index == 0)
+        {
+            _player.CmdSetSwordScaleY(10f);
+        }
+        else if (index == 1)
+        {
+            _player.CmdSetSwordScaleX(0.7f);
+        }
+        else if (index == 2)
+        {
+            if (_player != null)
+            {
+                PlayerAttack attack = _player.GetComponent<PlayerAttack>();
+
+                if (attack != null)
+                {
+                    attack.SetAttackAngle(360f);
+                }
+            }
+        }
     }
 }
