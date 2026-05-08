@@ -8,7 +8,11 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         _uiManager = FindFirstObjectByType<UIManager>();
-        _uiManager.ShowUI();  // Ä«µå ½½·Ô¸¸ ÄÔ
+
+        if (_uiManager != null)
+        {
+            _uiManager.ShowUI();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

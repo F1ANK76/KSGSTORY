@@ -1,7 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using Mirror;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -22,5 +23,15 @@ public class SceneLoader : MonoBehaviour
 
         // ¾À ÀüÈ¯
         SceneManager.LoadScene("PlayScene");
+    }
+
+    public void OnClickBoss()
+    {
+        Player player = FindFirstObjectByType<Player>();
+
+        if (player != null)
+        {
+            player.CmdGoBoss();
+        }
     }
 }

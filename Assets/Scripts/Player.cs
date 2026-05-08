@@ -27,7 +27,11 @@ public class Player : NetworkBehaviour
         CmdSetName(name);
 
         CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
-        cam.SetTarget(transform);
+
+        if(cam != null)
+        {
+            cam.SetTarget(transform);
+        }
 
         _uiManager = FindFirstObjectByType<UIManager>();
 
@@ -88,5 +92,11 @@ public class Player : NetworkBehaviour
         {
             _nameTMP.text = newName;
         }
+    }
+
+    [Command]
+    public void CmdGoBoss()
+    {
+        NetworkManager.singleton.ServerChangeScene("BossScene");
     }
 }
